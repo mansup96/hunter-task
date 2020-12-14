@@ -1,0 +1,11 @@
+const { override, addBabelPlugin } = require('customize-cra');
+
+module.exports = override(
+  addBabelPlugin([
+    'babel-plugin-styled-components',
+    {
+      displayName: true,
+    },
+  ]),
+    addBabelPlugin(["@babel/plugin-proposal-class-properties", { "loose": false }])
+);
