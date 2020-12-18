@@ -1,7 +1,8 @@
-import { createGlobalStyle, css } from 'styled-components';
+import { createGlobalStyle, css, DefaultTheme } from 'styled-components';
 import { normalize } from 'styled-normalize';
+import { ThemeKey } from '../styled';
 
-export const theme = {
+export const theme: DefaultTheme = {
   main: '#1C2025',
   accent: '#EC174F',
   accentHover: '#d4295b',
@@ -19,26 +20,11 @@ ${normalize}
 *, *:before, *:after {
   box-sizing: border-box;
   outline: none;
-  font-family: ${() => theme.sans} ;
-},
-`;
-
-export const scrollBarStyle = () => css`
-  ::-webkit-scrollbar {
-    width: 3px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background: ${({ theme }) => theme.main};
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: ${({ theme }) => theme.accent};
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: ${({ theme }) => theme.accentHover};
-  }
+  font-family: PT Sans, sans-serif;
+}
+a {
+   text-decoration: none;
+}
 `;
 
 export const fontStyle = (fontSize: string, color: string) => css`
@@ -50,7 +36,7 @@ export const fontStyle = (fontSize: string, color: string) => css`
   color: ${color};
 `;
 
-export const labelStyle = (color?: string) => css`
+export const labelStyle = (color?: ThemeKey) => css`
   display: block;
-  ${({ theme }) => fontStyle('12px', theme[color || 'white'])}
+  ${({ theme }) => fontStyle('12px', color ? theme[color] : theme.white)}
 `;

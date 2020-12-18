@@ -1,47 +1,49 @@
-import axios from 'axios';
-import queryString from 'query-string';
+// import axios from 'axios';
+import mockedAxios, { FORBIDDEN } from './fakeServer';
+import { TLoginFormData, TSignUpFormData } from '../store/authStore';
+//
+// let $axios = axios.create({
+//    baseURL: `${config.apiUrl}/walking`,
+// });
 
+export class RequestError extends Error {
+  data: { [key: string]: string };
+  constructor(data: { [key: string]: string }) {
+    super('Ошибка запроса');
+    this.data = data;
+  }
+}
 
-let $axios = axios.create({
-  // baseURL: `${config.apiUrl}/walking`,
-});
+export const api = {
+  login: async (formData: TLoginFormData) => {
+    try {
+      return await mockedAxios.post('/login', formData);
+    } catch (error) {
+      if (error.status === FORBIDDEN) {
+        throw new RequestError(error.response.data);
+      } else {
+        console.log(error);
+      }
+    }
+  },
 
-// type GetWalksResponseType = {
-//   data: Walk[];
-//   totalCount: number;
-// };
-//
-// type QueryParams = {
-//   _sort: string[];
-//   _order: SortOrderType[];
-//   _page: number;
-//   _limit: number;
-// };
-//
-// export const api = {
-//   getWalks: async (queryParams: QueryParams): Promise<GetWalksResponseType> => {
-//     const stringifiedParams = queryString.stringify(queryParams, {
-//       arrayFormat: 'comma',
-//     });
-//     const response = await $axios.get(`?${stringifiedParams}`);
-//     return {
-//       data: response.data,
-//       totalCount: Number(response.headers['x-total-count']),
-//     };
-//   },
-//
-//   postWalk: async (walk: CreatedWalk) => (await $axios.post('/', walk)).data,
-//
-//   putWalk: async (walk: Walk) => (await $axios.put(`/${walk.id}`, walk)).data,
-//
-//   deleteWalk: async (id: number) => (await $axios.delete(`/${id}`)).data,
-//
-//   getRangedWalks: async (range: {
-//     date_gte: string;
-//     date_lte: string;
-//   }): Promise<any> => {
-//     const stringifiedParams = queryString.stringify(range);
-//     const response = await $axios.get(`?${stringifiedParams}`);
-//     return response.data;
-//   },
-// };
+  signUp: async (formData: TSignUpFormData) => {
+    try {
+      return await mockedAxios.post('/sign_up', formData);
+    } catch (error) {
+      if (error.response.status === FORBIDDEN) {
+        throw new RequestError(error.response.data);
+      } else {
+        console.log(error);
+      }
+    }
+  },
+
+  me: async (token: string) => {
+    try {
+      return await mockedAxios.post('/me', token);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
