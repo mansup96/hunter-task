@@ -1,8 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Search from './components/Search/Search';
+import {
+  BrowserRouter as Router,
+  Route,
+  Switch,
+} from 'react-router-dom';
+import Search from './components/routes/Search/Search';
 import Header from './components/Header/Header';
-import Auth from './components/Auth/Auth';
+import Auth from './components/routes/Auth/Auth';
+import Home from './components/routes/Home/Home';
 
 const App = () => {
   return (
@@ -11,8 +16,9 @@ const App = () => {
         <Header />
         <main>
           <Switch>
-            <Route path="/" exact render={() => <Search />} />
             <Route path={['/login', '/sign_up']} render={() => <Auth />} />
+            <Route path="/search" render={() => <Search />} />
+            <Route path="/" render={() => <Home />} />
           </Switch>
         </main>
       </Router>

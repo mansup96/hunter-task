@@ -17,4 +17,7 @@ const Root = () => (
     </ThemeProvider>
   </React.Fragment>
 );
+
+(window as any).store = RootStore;
+
 ReactDOM.render(<Root />, document.getElementById('root'));

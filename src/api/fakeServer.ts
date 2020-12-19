@@ -108,4 +108,6 @@ mock.onPost('/me').reply(req => {
   return [200, { ...me }];
 });
 
+mock.restore()
+
 export default axios;

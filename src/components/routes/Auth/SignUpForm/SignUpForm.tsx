@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { TSignUpFormData } from '../../../store/authStore';
+import { TSignUpFormData } from '../../../../store/authStore';
 import { Link } from 'react-router-dom';
 
 type LoginFormProps = {

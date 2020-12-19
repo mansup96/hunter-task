@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import AuthControl from './AuthControl/AuthControl';
-import { useStores } from '../../hooks/useStore';
+import { useStores } from '../../hooks';
 
 const StyledHeader = styled.header`
   width: 100%;
@@ -31,7 +31,6 @@ const StyledHeader = styled.header`
 
 const Header = () => {
   const { authStore } = useStores();
-  console.log(authStore);
   return (
     <StyledHeader>
       <Link to="/" className="logo">

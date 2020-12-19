@@ -1,6 +1,6 @@
 import React from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
-import { TLoginFormData } from '../../../store/authStore';
+import { TLoginFormData } from '../../../../store/authStore';
 import * as Yup from 'yup';
 
 type LoginFormProps = {

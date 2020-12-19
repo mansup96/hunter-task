@@ -1,15 +1,10 @@
 import React, { useEffect } from 'react';
-import {
-  Redirect,
-  useHistory,
-  withRouter,
-  RouteComponentProps,
-} from 'react-router-dom';
-import { useStores } from '../../hooks/useStore';
+import { useHistory, withRouter, RouteComponentProps } from 'react-router-dom';
+import { useStores } from '../../../hooks';
 import { observer } from 'mobx-react-lite';
 import LoginForm from './LoginForm/LoginForm';
 import SignUpForm from './SignUpForm/SignUpForm';
-import { TLoginFormData, TSignUpFormData } from '../../store/authStore';
+import { TLoginFormData, TSignUpFormData } from '../../../store/authStore';
 
 export const Auth = observer((props: RouteComponentProps) => {
   const { authStore } = useStores();
