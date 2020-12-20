@@ -22,6 +22,11 @@ ${normalize}
   outline: none;
   font-family: PT Sans, sans-serif;
 }
+
+body {
+  width: 100vw;
+  overflow-x: hidden;
+}
 a {
    text-decoration: none;
 }
@@ -29,6 +34,11 @@ a {
 p {
   margin: 0;
   padding: 0;
+}
+
+.mainContainer {
+  width: 860px;
+  margin: 0 auto;
 }
 `;
 

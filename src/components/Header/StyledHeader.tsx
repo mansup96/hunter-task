@@ -5,8 +5,14 @@ const StyledHeader = styled.header`
   background-color: ${props => props.theme.main};
   padding: 15px 20px;
   margin-bottom: 20px;
-  display: flex;
-  align-items: center;
+
+  .container {
+    display: flex;
+    margin: 0 auto;
+    align-items: center;
+    width: 860px;
+    max-width: 100%;
+  }
 
   & .logo {
     display: block;

@@ -1,14 +1,11 @@
 import styled from 'styled-components';
 
 const StyledSearchLine = styled.div`
-  max-width: 800px;
   width: 100%;
-  margin: 0 auto;
 
   .container {
     display: flex;
     align-items: center;
-    margin: 0 20px;
   }
 
   .searchInput {

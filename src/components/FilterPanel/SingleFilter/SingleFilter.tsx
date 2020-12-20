@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import queryString from 'query-string';
 import angle from '../../../static/icons/angle-down-solid.svg';
-import { useQuery } from '../../../hooks';
 import { observer } from 'mobx-react-lite';
 import FilterItem from './FilterItem/FilterItem';
 import StyledSingleFilter from './StyledSingleFilter';

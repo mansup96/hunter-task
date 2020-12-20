@@ -21,7 +21,7 @@ const Search = () => {
   const history = useHistory();
   const { searchFor } = useParams<TRouteParams>();
   const { query } = useMemo(() => queryString.parseUrl(search), [search]);
-
+  console.log('render')
   useEffect(() => {
     searchStore.fetch(query, searchFor);
   }, [searchStore, query, searchFor]);
@@ -33,26 +33,33 @@ const Search = () => {
     history.push(`${pathname}?${paramsString}`);
   };
 
-  return searchStore.isFetching ? (
-    <div>Загрузка</div>
-  ) : (
+  const handlePage = (page: string) => {
+    const paramsString = queryString.stringify({ ...query, page });
+    history.push(`${pathname}?${paramsString}`);
+  };
+
+  return (
     <StyledSearch>
       <SearchLine
         text={typeof query.text === 'string' ? query.text : ''}
         onSubmit={queryParamsHandler}
       />
-      <Info amount={searchStore.pagination.found} type={searchFor} />
-      <div className="contentWrapper">
-        <FilterPanel
-          clusters={searchStore.clusters}
-          onFilterChanged={queryParamsHandler}
-        />
-        <List items={searchStore.items} itemType={searchFor} />
-      </div>
-      <Pagination
-        {...searchStore.pagination}
-        onPageChange={queryParamsHandler}
-      />
+      <Pagination {...searchStore.pagination} onPageChange={handlePage} />
+      {!!searchStore.pagination.found && (
+        <Info amount={searchStore.pagination.found} type={searchFor} />
+      )}
+      {!searchStore.isFetching && (
+        <>
+          <div className="contentWrapper">
+            <FilterPanel
+              clusters={searchStore.clusters}
+              onFilterChanged={queryParamsHandler}
+            />
+            <List items={searchStore.items} itemType={searchFor} />
+          </div>
+          <Pagination {...searchStore.pagination} onPageChange={handlePage} />
+        </>
+      )}
     </StyledSearch>
   );
 };

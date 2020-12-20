@@ -6,10 +6,12 @@ import StyledHeader from './StyledHeader';
 const Header = () => {
   return (
     <StyledHeader>
-      <Link to="/" className="logo">
-        HunterTask
-      </Link>
-      <AuthControl />
+      <div className="container">
+        <Link to="/" className="logo">
+          HunterTask
+        </Link>
+        <AuthControl />
+      </div>
     </StyledHeader>
   );
 };

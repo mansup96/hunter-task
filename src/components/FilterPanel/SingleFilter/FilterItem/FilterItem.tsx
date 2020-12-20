@@ -9,7 +9,7 @@ type TFilterItemProps = {
   onClick: (url: string) => void;
 };
 
-const StyledFilterItem = styled.li`
+const StyledFilterItem = styled.li<{ active: boolean }>`
   display: flex;
   align-items: center;
   padding: 4px 10px;
@@ -17,6 +17,8 @@ const StyledFilterItem = styled.li`
   font-weight: normal;
   font-size: 12px;
   width: 100%;
+  background-color: ${({ active, theme }) =>
+    active ? theme.gray : theme.white};
 
   &:hover {
     background-color: ${({ theme }) => theme.gray};
@@ -40,6 +42,7 @@ const FilterItem = ({ clusterItem, className, onClick }: TFilterItemProps) => {
   return (
     <StyledFilterItem
       className={className}
+      active={!!clusterItem.active}
       onClick={() => onClick(clusterItem.url)}
     >
       <span className="itemName">{clusterItem.name}</span>

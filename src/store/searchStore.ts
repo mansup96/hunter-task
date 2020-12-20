@@ -218,7 +218,6 @@ export class SearchStore {
         '/' + path + '?' + queryString.stringify(queryObj)
       )) as TSearchResponseData;
       const { items, pages, page, per_page, found, clusters } = responseData;
-      console.log(responseData.arguments, clusters);
       this.transformClusters(responseData.arguments, clusters);
       this.setItems(items);
       this.setPagination({ pages, page, per_page, found });

@@ -3,7 +3,7 @@ import { TPagination, TQueryParams } from '../../../store/searchStore';
 import StyledPagination from './StyledPagination';
 
 type TPaginationProps = TPagination & {
-  onPageChange: (updatedParams: Partial<TQueryParams>) => void;
+  onPageChange: (page: string) => void;
 };
 
 const range = (from: number, to: number, step = 1) => {
@@ -64,26 +64,27 @@ const Pagination = React.memo(
     const pagesRange = getPagesRange(page + 1, pages);
 
     const clickHandler = (page: number) => {
-      onPageChange({ page: (page - 1).toString() });
+      onPageChange((page - 1).toString());
     };
 
     return (
       <StyledPagination>
-        {pagesRange.map((p, index) => {
-          return typeof p === 'number' ? (
-            <li
-              key={index}
-              onClick={p === page + 1 ? undefined : () => clickHandler(p)}
-              className={`page ${p === page + 1 ? 'page--active' : ''} `}
-            >
-              {p}
-            </li>
-          ) : (
-            <li key={index} className="empty">
-              ...
-            </li>
-          );
-        })}
+        {pagesRange &&
+          pagesRange.map((p, index) => {
+            return typeof p === 'number' ? (
+              <li
+                key={index}
+                onClick={p === page + 1 ? undefined : () => clickHandler(p)}
+                className={`page ${p === page + 1 ? 'page--active' : ''} `}
+              >
+                {p}
+              </li>
+            ) : (
+              <li key={index} className="empty">
+                ...
+              </li>
+            );
+          })}
       </StyledPagination>
     );
   }
