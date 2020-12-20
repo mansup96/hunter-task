@@ -1,20 +1,17 @@
 import React from 'react';
-import SearchLine from '../../SearchLine/SearchLine';
+import SearchLine from '../../common/SearchLine/SearchLine';
 import { useHistory } from 'react-router-dom';
+import { TQueryParams } from '../../../store/searchStore';
 
 const Home = () => {
   const history = useHistory();
-
-  const submitHandler = (text: string) => {
-    console.log(text);
-    history.push(`/search/vacancies?text=${text}`);
+  const searchFor = 'vacancies';
+  const submitHandler = ({ text }: Partial<TQueryParams>) => {
+    history.push(`/search/${searchFor}?text=${text}`);
   };
 
   return (
-    <main>
-      {/*todo: Enter press search*/}
-      <SearchLine onSubmit={submitHandler} searchParam={'text'} />
-    </main>
+    <SearchLine placeholder="Поиск по вакансиям" onSubmit={submitHandler} />
   );
 };
 

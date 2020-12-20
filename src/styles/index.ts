@@ -4,11 +4,11 @@ import { ThemeKey } from '../styled';
 
 export const theme: DefaultTheme = {
   main: '#1C2025',
-  accent: '#EC174F',
-  accentHover: '#d4295b',
+  accent: '#0f8fee',
+  accentHover: '#0b5f9f',
   gray: '#EFEFF0',
   white: '#FFFFFF',
-  fontGray: '#A4A6A8',
+  fontGray: '#999',
   sans: 'PT Sans, sans-serif',
   sansCaption: 'PT Sans Caption, sans-serif',
   defaultTransition: '0.2s ease',
@@ -24,6 +24,11 @@ ${normalize}
 }
 a {
    text-decoration: none;
+}
+
+p {
+  margin: 0;
+  padding: 0;
 }
 `;
 

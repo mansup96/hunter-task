@@ -4,11 +4,6 @@ const hhAxios = axios.create({
   baseURL: 'https://api.hh.ru/',
 });
 
-axios
-  .get('/')
-  .then(resp => console.log(resp))
-  .catch(err => console.log(err.response));
-
 const headHunterApi = {
   fetch: async (paramsString: string) => {
     try {

@@ -1,28 +1,42 @@
-import { observer } from 'mobx-react-lite';
 import React from 'react';
+import styled from 'styled-components';
+import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
-import { AuthStore } from '../../../store/authStore';
+import { useStores } from '../../../hooks';
 
-type TAuthStoreProps = {
-  authStore: AuthStore;
-};
+const StyledAuthControl = styled.div`
+  .name {
+    color: ${({ theme }) => theme.white};
+  }
+  .link {
+    margin: 0 10px;
+    color: ${({ theme }) => theme.accent};
+  }
+`;
 
-const AuthControl = ({ authStore }: TAuthStoreProps) => {
+const AuthControl = () => {
+  const { authStore } = useStores();
 
-  return authStore.isAuth ? (
-    <>
-      <span>{authStore.name}</span>
-      <button onClick={authStore.logout}>Выйти</button>
-    </>
-  ) : (
-    <>
-      <Link className="link" to="/login">
-        Войти
-      </Link>
-      <Link className="link" to="/sign_up">
-        Регистрация
-      </Link>
-    </>
+  return (
+    <StyledAuthControl>
+      {authStore.isAuth ? (
+        <>
+          <span className="name">{authStore.name}</span>
+          <a className="link" onClick={authStore.logout}>
+            Выйти
+          </a>
+        </>
+      ) : (
+        <>
+          <Link className="link" to="/login">
+            Войти
+          </Link>
+          <Link className="link" to="/sign_up">
+            Регистрация
+          </Link>
+        </>
+      )}
+    </StyledAuthControl>
   );
 };
 

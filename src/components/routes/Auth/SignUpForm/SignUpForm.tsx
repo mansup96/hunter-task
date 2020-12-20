@@ -39,7 +39,6 @@ const SignUpForm = ({ onSubmit }: LoginFormProps) => {
   ) => {
     setSubmitting(true);
     const result = await onSubmit(values);
-    console.log(result);
     if (!result.success && result.error) {
       setErrors(result.error);
     } else {

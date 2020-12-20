@@ -1,37 +1,60 @@
 import { observer } from 'mobx-react-lite';
-import React, { useEffect, useState } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
-import { useQuery, useStores } from '../../../hooks';
-import SearchLine from '../../SearchLine/SearchLine';
-import { TSearchParamKeys } from '../../../store/searchStore';
+import React, { useEffect, useMemo } from 'react';
+import { useLocation, useParams, useHistory } from 'react-router-dom';
+import { useStores } from '../../../hooks';
+import SearchLine from '../../common/SearchLine/SearchLine';
+import { TSearchFor, TQueryParams } from '../../../store/searchStore';
 import queryString from 'query-string';
+import List from '../../List/List';
+import StyledSearch from './StyledSearch';
+import Info from '../../Info/Info';
+import Pagination from '../../common/Pagiantion/Pagination';
+import FilterPanel from '../../FilterPanel/FilterPanel';
 
-const Search = ({ history, location, match }: RouteComponentProps) => {
+type TRouteParams = {
+  searchFor: TSearchFor;
+};
+
+const Search = () => {
   const { searchStore } = useStores();
-  const { query } = useQuery();
+  const { search, pathname } = useLocation();
+  const history = useHistory();
+  const { searchFor } = useParams<TRouteParams>();
+  const { query } = useMemo(() => queryString.parseUrl(search), [search]);
 
   useEffect(() => {
-    searchStore.fetch(location.search);
-  }, [location,searchStore]);
+    searchStore.fetch(query, searchFor);
+  }, [searchStore, query, searchFor]);
 
-  const queryParamsHandler = (value: string, searchParam: TSearchParamKeys) => {
-    const paramsString = queryString.stringify({
-      ...query,
-      [searchParam]: value,
-    });
+  const queryParamsHandler = (updatedParams: Partial<TQueryParams>) => {
+    if (!updatedParams.page) updatedParams.page = '0';
+    const paramsString = queryString.stringify(updatedParams);
 
-    history.push(`${location.pathname}?${paramsString}`);
+    history.push(`${pathname}?${paramsString}`);
   };
 
-  return (
-    <main>
+  return searchStore.isFetching ? (
+    <div>Загрузка</div>
+  ) : (
+    <StyledSearch>
       <SearchLine
         text={typeof query.text === 'string' ? query.text : ''}
         onSubmit={queryParamsHandler}
-        searchParam={'text'}
       />
-    </main>
+      <Info amount={searchStore.pagination.found} type={searchFor} />
+      <div className="contentWrapper">
+        <FilterPanel
+          clusters={searchStore.clusters}
+          onFilterChanged={queryParamsHandler}
+        />
+        <List items={searchStore.items} itemType={searchFor} />
+      </div>
+      <Pagination
+        {...searchStore.pagination}
+        onPageChange={queryParamsHandler}
+      />
+    </StyledSearch>
   );
 };
 
-export default withRouter(observer(Search));
+export default observer(Search);

@@ -87,8 +87,7 @@ export class AuthStore {
   }
 
   logout = () => {
-    console.log(this);
     this.setMe(null);
     localStorage.setItem('accessToken', 'null');
-  }
+  };
 }

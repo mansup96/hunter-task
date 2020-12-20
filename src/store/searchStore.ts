@@ -1,16 +1,38 @@
 import { action, makeObservable, observable } from 'mobx';
 import headHunterApi from '../api/headHunterApi';
-import { string } from 'yup';
+import queryString from 'query-string';
 
-export type TSearchParamKeys = 'text' | 'area' | 'salary';
-
-type TSearchParams = {
-  text: string;
+export type TClusters = {
   area: string;
   salary: string;
+  clusters: boolean;
+  specialization: string;
+  industry: string;
+  metro: string;
+  professional_area: string;
+  sub_industry: string;
+  experience: string;
+  employment: string;
+  schedule: string;
+  label: string;
 };
 
-type TMetro = {
+export type TQueryParams = TClusters & {
+  text: string;
+  page: string;
+  describe_arguments: boolean;
+};
+
+export type TSearchFor = 'vacancies' | 'resume' | 'employers';
+
+export type TPagination = {
+  found: number;
+  page: number;
+  per_page: number;
+  pages: number;
+};
+
+export type TMetro = {
   station_name: string;
   line_name: string;
   station_id: string;
@@ -19,7 +41,7 @@ type TMetro = {
   lng: number;
 };
 
-type TEmployer = {
+export type TEmployer = {
   id: string;
   name: string;
   url: string;
@@ -32,7 +54,25 @@ type TEmployer = {
   vacancies_url: string;
 };
 
-type TVacancy = {
+export type TArgument = {
+  argument: string;
+  value: string;
+  value_description: string | null;
+  disable_url: string;
+  cluster_group: {
+    id: string;
+    name: string;
+  };
+};
+
+export type TSalary = {
+  from: number;
+  to: number;
+  currency: string;
+  gross: boolean;
+};
+
+export type TVacancy = {
   id: string;
   premium: boolean;
   name: string;
@@ -41,12 +81,7 @@ type TVacancy = {
     name: string;
     url: string;
   };
-  salary: {
-    from: number;
-    to: number;
-    currency: string;
-    gross: boolean;
-  };
+  salary: TSalary;
   type: {
     id: string;
     name: string;
@@ -68,8 +103,8 @@ type TVacancy = {
   url: string;
   alternate_url: string;
   snippet: {
-    requirement: 'Опыт работы в сфере школьного образования от 3-х лет. Опыт организации и перспективного планирования учебной деятельности отделения. ';
-    responsibility: 'Организация и контроль текущего и перспективного планирования учебной деятельности отделения. Создание и контроль условий для работы преподавательского состава Школы (включая...';
+    requirement: string;
+    responsibility: string;
   };
   schedule: {
     id: 'fullDay' | 'shift' | 'flexible' | 'remote' | 'flyInFlyOut';
@@ -78,13 +113,27 @@ type TVacancy = {
   accept_temporary: boolean;
 };
 
-type TSearchResponseData = {
+export type TCluster = {
+  id: string;
+  name: string;
+  items: TClusterItem[];
+};
+
+export type TClusterItem = {
+  name: string;
+  argument?: string;
+  url: string;
+  count?: number;
+  active?: boolean;
+};
+
+export type TSearchResponseData = {
   found: number;
   page: number;
   per_page: number;
   pages: number;
-  clusters: any;
-  arguments: any;
+  clusters: TCluster[];
+  arguments: TArgument[];
   items: [] | TVacancy[];
 };
 
@@ -92,13 +141,16 @@ export class SearchStore {
   constructor() {
     makeObservable(this, {
       items: observable,
-      find: action,
       isFetching: observable,
       pagination: observable,
+      fetch: action,
+      setItems: action,
+      clusters: observable,
+      transformClusters: action,
     });
   }
-  searchFor = '/vacancies';
   isFetching = false;
+  clusters: TCluster[] = [];
   pagination = {
     found: 0,
     page: 0,
@@ -107,31 +159,72 @@ export class SearchStore {
   };
   items: TVacancy[] = [];
 
-  async find(text: string) {}
+  arguments: any | null = null;
 
-  async fetch(paramsString: string) {
+  setArguments(args: TArgument[]) {
+    this.arguments = args;
+  }
+
+  setItems(items: TVacancy[]) {
+    this.items = items;
+  }
+
+  setPagination(pagination: TPagination) {
+    this.pagination = pagination;
+  }
+
+  setClusters(clusters: TCluster[]) {
+    this.clusters = clusters;
+  }
+
+  transformClusters(args: TArgument[], clusters: TCluster[]) {
+    if (!args) this.setClusters(clusters);
+
+    args.forEach(arg => {
+      if (arg.cluster_group && arg.value_description) {
+        const activeClusterItem = {
+          active: true,
+          name: arg.value_description,
+          argument: arg.argument,
+          url: arg.disable_url,
+        };
+        const cluster = clusters.find(
+          cluster => cluster.id === arg.cluster_group.id
+        );
+        if (cluster) cluster.items.unshift(activeClusterItem);
+        else
+          clusters.unshift({
+            id: arg.cluster_group.id,
+            name: arg.cluster_group.name,
+            items: [activeClusterItem],
+          });
+      }
+    });
+
+    this.setClusters(clusters);
+  }
+
+  async fetch(queryObj: Partial<TQueryParams>, path: string) {
     try {
       this.isFetching = true;
+      console.log(queryString.stringify(queryObj));
+      queryObj = {
+        ...queryObj,
+        describe_arguments: true,
+        clusters: true,
+        page: queryObj.page ? queryObj.page : '0',
+      };
       const responseData = (await headHunterApi.fetch(
-        this.searchFor + paramsString
+        '/' + path + '?' + queryString.stringify(queryObj)
       )) as TSearchResponseData;
-      console.log(responseData);
-      const {
-        items,
-        pages,
-        page,
-        per_page,
-        found,
-      } = responseData;
-      this.items = items;
-      this.pagination = { pages, page, per_page, found };
+      const { items, pages, page, per_page, found, clusters } = responseData;
+      console.log(responseData.arguments, clusters);
+      this.transformClusters(responseData.arguments, clusters);
+      this.setItems(items);
+      this.setPagination({ pages, page, per_page, found });
       this.isFetching = false;
     } catch (err) {
       console.log(err);
     }
-  }
-
-  async getItems(params: string) {
-    // await headHunterApi.getList(params);
   }
 }
