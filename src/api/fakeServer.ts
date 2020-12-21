@@ -2,7 +2,7 @@ import axios from 'axios';
 import Mocker from 'axios-mock-adapter';
 import { v4 as uuidv4 } from 'uuid';
 
-const mock = new Mocker(axios, { delayResponse: 500 });
+const mock = new Mocker(axios);
 
 type TUser = {
   id: string;
@@ -40,15 +40,18 @@ export const CREATED = 201,
 
 mock.onPost('/login').reply(req => {
   const { email, password } = JSON.parse(req.data);
+  const validationErrorData = {
+    common: 'Неверный email или пароль',
+    success: false,
+  };
 
-  if (!(email && password))
-    return [FORBIDDEN, { common: 'Введите корректные данные' }];
+  if (!(email && password)) return [FORBIDDEN, validationErrorData];
 
   const savedUsers = getSavedUsers();
   const user = savedUsers.find(user => (user.email = email));
 
   if (!(user && user.password === password))
-    return [FORBIDDEN, { common: 'Неверный e-mail или пароль' }];
+    return [FORBIDDEN, validationErrorData];
 
   const { password: pass, ...me } = user;
 
@@ -77,7 +80,7 @@ mock.onPost('/sign_up').reply(req => {
     return [
       FORBIDDEN,
       {
-        email: 'Пользователь с таким E-mail уже существует',
+        email: 'Пользователь с таким email уже существует',
       },
     ];
 

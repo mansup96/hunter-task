@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable } from 'mobx';
-import { api, RequestError } from '../api/api';
+import { api, ValidationError } from '../api/api';
 
 export type TLoginFormData = {
   email: string;
@@ -75,14 +75,15 @@ export class AuthStore {
   async login(formData: TLoginFormData) {
     try {
       const response = await api.login(formData);
-      if (!response?.data)
-        return new RequestError({ common: 'Ошибка сервера' });
-      const { accessToken, ...me } = response.data;
-      localStorage.setItem('accessToken', accessToken);
-      this.setMe(me);
-      return Promise.resolve({ success: true });
+      if (response) {
+        const { accessToken, ...me } = response.data;
+        localStorage.setItem('accessToken', accessToken);
+        this.setMe(me);
+        return { success: true };
+      }
     } catch (error) {
-      return Promise.resolve({ ...error.data, success: false });
+      console.log(error.data);
+      return error.data;
     }
   }
 

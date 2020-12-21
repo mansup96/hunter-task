@@ -4,18 +4,19 @@ import { useStores } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 import StyledVacancy from './StyledVacancy';
 import Salary from '../../common/Salary/Salary';
-// todo: Чистить стор при уходе со страницы
+
 const Vacancy = () => {
   const { vacancyStore } = useStores();
   const { id } = useParams<{ id: string }>();
   const { vacancy } = vacancyStore;
+
   useEffect(() => {
     vacancyStore.getVacancy(id);
     return () => {
       vacancyStore.setVacancy(null);
     };
   }, [id, vacancyStore]);
-  console.log(vacancy);
+
   return vacancy ? (
     <StyledVacancy>
       <h1>{vacancy.name}</h1>

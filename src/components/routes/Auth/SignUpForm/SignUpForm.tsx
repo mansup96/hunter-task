@@ -50,11 +50,6 @@ const SignUpForm = ({ onSubmit }: LoginFormProps) => {
 
   return (
     <>
-      {success && (
-        <div>
-          Регистрация успешна! Вы можете <Link to="/login"> войти</Link>
-        </div>
-      )}
       <Formik
         initialValues={{
           name: '',
@@ -68,32 +63,53 @@ const SignUpForm = ({ onSubmit }: LoginFormProps) => {
       >
         {formikProps => (
           <Form>
-            <div>
-              <Field name="name" type="text" placeholder="Name" />
-              <ErrorMessage name="name" />
+            <div className="inputWrapper">
+              <label htmlFor="name">Имя</label>
+              <Field name="name" type="text" id="name" />
+              <ErrorMessage name="name" className="error" component="span" />
             </div>
-            <div>
-              <Field name="email" type="text" placeholder="Email" />
-              <ErrorMessage name="email" />
+            <div className="inputWrapper">
+              <label htmlFor="email">Email адрес</label>
+              <Field name="email" type="text" id="email" />
+              <ErrorMessage name="email" className="error" component="span" />
             </div>
-            <div>
-              <Field name="password" type="password" placeholder="Password" />
-              <ErrorMessage name="password" />
+            <div className="inputWrapper">
+              <label htmlFor="password">Пароль</label>
+              <Field name="password" type="password" id="password" />
+              <ErrorMessage
+                name="password"
+                className="error"
+                component="span"
+              />
             </div>
-            <div>
+            <div className="inputWrapper">
+              <label htmlFor="passwordConfirmation">Повторите пароль</label>
               <Field
                 name="passwordConfirmation"
                 type="password"
-                placeholder="Password"
+                id="passwordConfirmation"
               />
-              <ErrorMessage name="passwordConfirmation" />
+              <ErrorMessage
+                name="passwordConfirmation"
+                className="error"
+                component="span"
+              />
             </div>
-            <ErrorMessage name="common" />
             <div>
               <button disabled={formikProps.isSubmitting} type="submit">
-                Sign Up
+                Зарегистрироваться
               </button>
             </div>
+            {success && (
+              <span className="success">
+                Регистрация успешна! Вы можете <Link to="/login">войти</Link>
+              </span>
+            )}
+            <ErrorMessage
+              name="common"
+              className="error--common"
+              component="span"
+            />
           </Form>
         )}
       </Formik>

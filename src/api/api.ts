@@ -1,15 +1,11 @@
-// import axios from 'axios';
 import mockedAxios, { FORBIDDEN } from './fakeServer';
 import { TLoginFormData, TSignUpFormData } from '../store/authStore';
-//
-// let $axios = axios.create({
-//    baseURL: `${config.apiUrl}/walking`,
-// });
 
-export class RequestError extends Error {
+
+export class ValidationError extends Error {
   data: { [key: string]: string };
   constructor(data: { [key: string]: string }) {
-    super('Ошибка запроса');
+    super('Ошибка валидации формы');
     this.data = data;
   }
 }
@@ -19,8 +15,8 @@ export const api = {
     try {
       return await mockedAxios.post('/login', formData);
     } catch (error) {
-      if (error.status === FORBIDDEN) {
-        throw new RequestError(error.response.data);
+      if (error.response.status === FORBIDDEN) {
+        throw new ValidationError(error.response.data);
       } else {
         console.log(error);
       }
@@ -32,7 +28,7 @@ export const api = {
       return await mockedAxios.post('/sign_up', formData);
     } catch (error) {
       if (error.response.status === FORBIDDEN) {
-        throw new RequestError(error.response.data);
+        throw new ValidationError(error.response.data);
       } else {
         console.log(error);
       }

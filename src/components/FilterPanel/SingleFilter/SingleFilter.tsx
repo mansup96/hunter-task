@@ -23,7 +23,6 @@ const SingleFilter = ({ cluster, onUpdate }: TSingleFilterProps) => {
   const [isOpen, setIsOpen] = useState(checkCluster(cluster));
 
   const clickHandler = (url: string) => {
-    console.log(url);
     const parsedUrl = queryString.parseUrl(url);
     onUpdate(parsedUrl.query);
   };

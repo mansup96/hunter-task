@@ -9,8 +9,17 @@ const StyledAuthControl = styled.div`
     color: ${({ theme }) => theme.white};
   }
   .link {
+    cursor: pointer;
     margin-left: 20px;
     color: ${({ theme }) => theme.accent};
+  }
+
+  .logout {
+    cursor: pointer;
+    margin-left: 20px;
+    color: ${({ theme }) => theme.accent};
+    background-color: transparent;
+    border: none;
   }
 `;
 
@@ -22,9 +31,9 @@ const AuthControl = () => {
       {authStore.isAuth ? (
         <>
           <span className="name">{authStore.name}</span>
-          <a className="link" onClick={authStore.logout}>
+          <button className="logout" onClick={authStore.logout}>
             Выйти
-          </a>
+          </button>
         </>
       ) : (
         <>

@@ -5,6 +5,7 @@ import { ThemeKey } from '../styled';
 export const theme: DefaultTheme = {
   main: '#1C2025',
   accent: '#0f8fee',
+  warn: '#be1010',
   accentHover: '#0b5f9f',
   gray: '#EFEFF0',
   white: '#FFFFFF',

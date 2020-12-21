@@ -10,7 +10,6 @@ type TFilterPanelProps = {
 };
 
 const FilterPanel = ({ onFilterChanged, clusters }: TFilterPanelProps) => {
-  console.log('render')
   return (
     <StyledFilterPanel>
       {clusters.map(cluster => (

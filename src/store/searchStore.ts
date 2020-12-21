@@ -152,13 +152,15 @@ export class SearchStore {
         clusters: true,
         page: queryObj.page ? queryObj.page : '0',
       };
+
       const currentSearch = queryString.stringify(queryObj);
-      console.log(currentSearch !== this.lastSearch)
+
       if (currentSearch !== this.lastSearch) {
         this.lastSearch = currentSearch;
         const responseData = (await headHunterApi.fetch(
           '/' + path + '?' + currentSearch
         )) as TSearchResponseData;
+
         const { items, pages, page, per_page, found, clusters } = responseData;
         this.transformClusters(responseData.arguments, clusters);
         this.setItems(items);
