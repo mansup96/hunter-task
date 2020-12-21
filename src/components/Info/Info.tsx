@@ -3,7 +3,7 @@ import { TSearchFor } from '../../store/searchStore';
 import styled from 'styled-components';
 
 const StyledInfo = styled.p`
-margin: 20px 30px;
+  margin: 20px 30px;
 `;
 
 const declOfNum = (number: number, titles: string[]): string => {

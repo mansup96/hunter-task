@@ -56,7 +56,11 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
                 Войти
               </button>
             </div>
-            <ErrorMessage name="common" className="error--common" component="span" />
+            <ErrorMessage
+              name="common"
+              className="error--common"
+              component="span"
+            />
           </Form>
         )}
       </Formik>

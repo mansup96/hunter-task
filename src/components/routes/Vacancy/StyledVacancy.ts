@@ -22,7 +22,7 @@ const StyledVacancy = styled.div`
     margin-top: 25px;
 
     .employerName {
-    display:block;
+      display: block;
       font-size: 22px;
       margin-bottom: 10px;
     }
