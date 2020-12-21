@@ -6,10 +6,19 @@ import SearchLine from '../../common/SearchLine/SearchLine';
 import { TSearchFor, TQueryParams } from '../../../store/searchStore';
 import queryString from 'query-string';
 import List from '../../List/List';
-import StyledSearch from './StyledSearch';
 import Info from '../../Info/Info';
 import Pagination from '../../common/Pagiantion/Pagination';
 import FilterPanel from '../../FilterPanel/FilterPanel';
+import styled from 'styled-components';
+
+const StyledSearch = styled.div`
+  max-width: 100%;
+  padding-bottom: 50px;
+
+  .contentWrapper {
+    display: flex;
+  }
+`;
 
 type TRouteParams = {
   searchFor: TSearchFor;

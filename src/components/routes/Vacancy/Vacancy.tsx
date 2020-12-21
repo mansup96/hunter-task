@@ -12,6 +12,10 @@ const Vacancy = () => {
   const { vacancy } = vacancyStore;
 
   useEffect(() => {
+    if (vacancy) document.title = vacancy.name;
+  }, [vacancy]);
+
+  useEffect(() => {
     vacancyStore.getVacancy(id);
     return () => {
       vacancyStore.setVacancy(null);

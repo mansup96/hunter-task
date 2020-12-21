@@ -80,10 +80,8 @@ export class SearchStore {
       transformClusters: action,
       setPagination: action,
       setFetching: action,
-      lastSearch: observable,
     });
   }
-  lastSearch: string = '';
   isFetching = false;
   clusters: TCluster[] = [];
   pagination = {
@@ -155,17 +153,15 @@ export class SearchStore {
 
       const currentSearch = queryString.stringify(queryObj);
 
-      if (currentSearch !== this.lastSearch) {
-        this.lastSearch = currentSearch;
-        const responseData = (await headHunterApi.fetch(
-          '/' + path + '?' + currentSearch
-        )) as TSearchResponseData;
+      const responseData = (await headHunterApi.fetch(
+        '/' + path + '?' + currentSearch
+      )) as TSearchResponseData;
 
-        const { items, pages, page, per_page, found, clusters } = responseData;
-        this.transformClusters(responseData.arguments, clusters);
-        this.setItems(items);
-        this.setPagination({ pages, page, per_page, found });
-      }
+      const { items, pages, page, per_page, found, clusters } = responseData;
+      this.transformClusters(responseData.arguments, clusters);
+      this.setItems(items);
+      this.setPagination({ pages, page, per_page, found });
+
       this.setFetching(false);
     } catch (err) {
       console.log(err);
