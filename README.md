@@ -1,8 +1,8 @@
 # Get ready to amazing head hunter trip 
 
-This project is being created as a test task for frontend developer vacancy
+This project was created as a test task for frontend developer vacancy
 
-Fill free to make pull requests (I'm sure nobody will), all feature issues will be reviewed (if at least one will be)
+Feel free to make pull requests (I'm sure nobody will), all enhancement issues will be reviewed (if at least one will be)
 
 ## Available Scripts
 
