@@ -4,6 +4,7 @@ import { useStores } from '../../../hooks';
 import { useParams } from 'react-router-dom';
 import StyledVacancy from './StyledVacancy';
 import Salary from '../../common/Salary/Salary';
+import { TSpecification } from '../../../store/vacancyStore';
 
 const Vacancy = () => {
   const { vacancyStore } = useStores();
@@ -21,6 +22,7 @@ const Vacancy = () => {
     <StyledVacancy>
       <h1>{vacancy.name}</h1>
       <Salary salary={vacancy.salary} className={'salary'} />
+
       <div className="meta">
         <div>
           <a
@@ -31,14 +33,17 @@ const Vacancy = () => {
           >
             {vacancy.employer.name}
           </a>
-          {vacancy.address && (
+          {vacancy.address ? (
             <p className={'address'}>{vacancy.address.raw}</p>
+          ) : (
+            <p className={'address'}>{vacancy.area.name}</p>
           )}
         </div>
         {vacancy.employer.logo_urls && (
           <img src={vacancy.employer.logo_urls.original} alt="logo" />
         )}
       </div>
+
       <a
         href={vacancy.apply_alternate_url}
         className="apply"
@@ -48,6 +53,29 @@ const Vacancy = () => {
         Откликнуться
       </a>
 
+      <div className="specifications">
+        {vacancy.employment && (
+          <span className="specificationItem">
+            {
+              vacancyStore.dictionaries.employment.find(
+                (empl: TSpecification) => empl.id === vacancy?.employment?.id
+              ).name
+            }
+          </span>
+        )}
+
+        {vacancy.schedule && (
+          <span className="specificationItem">
+            {
+              vacancyStore.dictionaries.schedule.find(
+                (schedule: TSpecification) =>
+                  schedule.id === vacancy?.schedule?.id
+              ).name
+            }
+          </span>
+        )}
+      </div>
+
       {vacancy.branded_description ? (
         <div
           className="brandedDescription"
@@ -55,14 +83,23 @@ const Vacancy = () => {
         />
       ) : vacancy.description ? (
         <div
-          className="brandedDescription"
+          className="description"
           dangerouslySetInnerHTML={{ __html: vacancy.description }}
         />
       ) : null}
+
+      {!!vacancy.key_skills.length && (
+        <div className="keySkills">
+          <p className="title">Ключевые навыки:</p>
+          <div className="keySkillsWrapper">
+            {vacancy.key_skills.map(skill => (
+              <p className="skillItem">{skill.name}</p>
+            ))}
+          </div>
+        </div>
+      )}
     </StyledVacancy>
-  ) : (
-    <div></div>
-  );
+  ) : null;
 };
 
 export default observer(Vacancy);

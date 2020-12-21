@@ -2,7 +2,7 @@ import axios from 'axios';
 import Mocker from 'axios-mock-adapter';
 import { v4 as uuidv4 } from 'uuid';
 
-const mock = new Mocker(axios);
+const mock = new Mocker(axios, { onNoMatch: 'passthrough' });
 
 type TUser = {
   id: string;
@@ -110,7 +110,5 @@ mock.onPost('/me').reply(req => {
   const { password, ...me } = user;
   return [200, { ...me }];
 });
-
-mock.restore();
 
 export default axios;

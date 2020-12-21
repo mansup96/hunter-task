@@ -30,12 +30,16 @@ export type TSalary = {
   gross: boolean;
 };
 
+export type TSpecification = { id: string; name: string };
+
 export type TVacancy = {
   id: string;
   premium: boolean;
   name: string;
   branded_description: string;
   description: string;
+  key_skills: { name: string }[];
+  employment: TSpecification | null;
   area: {
     id: string;
     name: string;
@@ -76,14 +80,26 @@ export type TVacancy = {
 
 export class VacancyStore {
   constructor() {
+    this.getDictionaries();
     makeObservable(this, {
       vacancy: observable,
       getVacancy: action,
       setVacancy: action,
+      getDictionaries: action,
     });
   }
-
   vacancy: TVacancy | null = null;
+
+  dictionaries: any = null;
+
+  getDictionaries() {
+    headHunterApi
+      .getDictionaries()
+      .then(resp => {
+        this.dictionaries = resp;
+      })
+      .catch(error => console.log(error));
+  }
 
   setVacancy(vacancy: TVacancy | null) {
     this.vacancy = vacancy;

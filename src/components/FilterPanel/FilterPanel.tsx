@@ -1,6 +1,5 @@
 import React from 'react';
 import { TCluster, TQueryParams } from '../../store/searchStore';
-import { observer } from 'mobx-react-lite';
 import SingleFilter from './SingleFilter/SingleFilter';
 import StyledFilterPanel from './StyledFilterPanel';
 

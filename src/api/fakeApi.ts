@@ -10,7 +10,7 @@ export class ValidationError extends Error {
   }
 }
 
-export const api = {
+export const fakeApi = {
   login: async (formData: TLoginFormData) => {
     try {
       return await mockedAxios.post('/login', formData);

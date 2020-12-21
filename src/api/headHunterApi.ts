@@ -20,6 +20,14 @@ const headHunterApi = {
       console.log(err);
     }
   },
+
+  getDictionaries: async () => {
+    try {
+      return (await hhAxios.get('/dictionaries')).data;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default headHunterApi;
