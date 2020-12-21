@@ -9,7 +9,7 @@ const StyledAuthControl = styled.div`
     color: ${({ theme }) => theme.white};
   }
   .link {
-    margin: 0 10px;
+    margin-left: 20px;
     color: ${({ theme }) => theme.accent};
   }
 `;

@@ -1,8 +1,9 @@
 import React from 'react';
-import { TSearchFor, TVacancy } from '../../store/searchStore';
+import { TSearchFor } from '../../store/searchStore';
 import { observer } from 'mobx-react-lite';
 import VacancyItem from './VacancyItem/VacancyItem';
 import StyledList from './StyledList';
+import { TVacancy } from '../../store/vacancyStore';
 
 type TList<T = TVacancy> = {
   items: T[];

@@ -1,11 +1,11 @@
 import { action, makeObservable, observable } from 'mobx';
 import headHunterApi from '../api/headHunterApi';
 import queryString from 'query-string';
+import { TVacancy } from './vacancyStore';
 
-export type TClusters = {
+export type TClusterGroups = {
   area: string;
   salary: string;
-  clusters: boolean;
   specialization: string;
   industry: string;
   metro: string;
@@ -17,10 +17,11 @@ export type TClusters = {
   label: string;
 };
 
-export type TQueryParams = TClusters & {
+export type TQueryParams = TClusterGroups & {
+  clusters: boolean;
+  describe_arguments: boolean;
   text: string;
   page: string;
-  describe_arguments: boolean;
 };
 
 export type TSearchFor = 'vacancies' | 'resume' | 'employers';
@@ -32,28 +33,6 @@ export type TPagination = {
   pages: number;
 };
 
-export type TMetro = {
-  station_name: string;
-  line_name: string;
-  station_id: string;
-  line_id: string;
-  lat: number;
-  lng: number;
-};
-
-export type TEmployer = {
-  id: string;
-  name: string;
-  url: string;
-  alternate_url: string;
-  logo_urls: {
-    90: string;
-    240: string;
-    original: string;
-  };
-  vacancies_url: string;
-};
-
 export type TArgument = {
   argument: string;
   value: string;
@@ -63,54 +42,6 @@ export type TArgument = {
     id: string;
     name: string;
   };
-};
-
-export type TSalary = {
-  from: number;
-  to: number;
-  currency: string;
-  gross: boolean;
-};
-
-export type TVacancy = {
-  id: string;
-  premium: boolean;
-  name: string;
-  area: {
-    id: string;
-    name: string;
-    url: string;
-  };
-  salary: TSalary;
-  type: {
-    id: string;
-    name: string;
-  };
-  address: {
-    city: string;
-    street: string;
-    building: string;
-    description: string;
-    lat: number;
-    lng: number;
-    metro: TMetro;
-    metro_stations: TMetro[];
-  };
-  sort_point_distance: null;
-  employer: TEmployer;
-  published_at: string;
-  apply_alternate_url: string;
-  url: string;
-  alternate_url: string;
-  snippet: {
-    requirement: string;
-    responsibility: string;
-  };
-  schedule: {
-    id: 'fullDay' | 'shift' | 'flexible' | 'remote' | 'flyInFlyOut';
-    name: string;
-  };
-  accept_temporary: boolean;
 };
 
 export type TCluster = {
@@ -147,8 +78,12 @@ export class SearchStore {
       setItems: action,
       clusters: observable,
       transformClusters: action,
+      setPagination: action,
+      setFetching: action,
+      lastSearch: observable,
     });
   }
+  lastSearch: string = '';
   isFetching = false;
   clusters: TCluster[] = [];
   pagination = {
@@ -160,6 +95,10 @@ export class SearchStore {
   items: TVacancy[] = [];
 
   arguments: any | null = null;
+
+  setFetching(flag: boolean) {
+    this.isFetching = flag;
+  }
 
   setArguments(args: TArgument[]) {
     this.arguments = args;
@@ -206,22 +145,26 @@ export class SearchStore {
 
   async fetch(queryObj: Partial<TQueryParams>, path: string) {
     try {
-      this.isFetching = true;
-      console.log(queryString.stringify(queryObj));
+      this.setFetching(true);
       queryObj = {
         ...queryObj,
         describe_arguments: true,
         clusters: true,
         page: queryObj.page ? queryObj.page : '0',
       };
-      const responseData = (await headHunterApi.fetch(
-        '/' + path + '?' + queryString.stringify(queryObj)
-      )) as TSearchResponseData;
-      const { items, pages, page, per_page, found, clusters } = responseData;
-      this.transformClusters(responseData.arguments, clusters);
-      this.setItems(items);
-      this.setPagination({ pages, page, per_page, found });
-      this.isFetching = false;
+      const currentSearch = queryString.stringify(queryObj);
+      console.log(currentSearch !== this.lastSearch)
+      if (currentSearch !== this.lastSearch) {
+        this.lastSearch = currentSearch;
+        const responseData = (await headHunterApi.fetch(
+          '/' + path + '?' + currentSearch
+        )) as TSearchResponseData;
+        const { items, pages, page, per_page, found, clusters } = responseData;
+        this.transformClusters(responseData.arguments, clusters);
+        this.setItems(items);
+        this.setPagination({ pages, page, per_page, found });
+      }
+      this.setFetching(false);
     } catch (err) {
       console.log(err);
     }

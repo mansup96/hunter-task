@@ -10,6 +10,7 @@ type TFilterPanelProps = {
 };
 
 const FilterPanel = ({ onFilterChanged, clusters }: TFilterPanelProps) => {
+  console.log('render')
   return (
     <StyledFilterPanel>
       {clusters.map(cluster => (
@@ -23,4 +24,4 @@ const FilterPanel = ({ onFilterChanged, clusters }: TFilterPanelProps) => {
   );
 };
 
-export default observer(FilterPanel);
+export default FilterPanel;

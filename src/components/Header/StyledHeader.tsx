@@ -3,14 +3,14 @@ import styled from 'styled-components';
 const StyledHeader = styled.header`
   width: 100%;
   background-color: ${props => props.theme.main};
-  padding: 15px 20px;
+  padding: 15px 40px 15px 20px;
   margin-bottom: 20px;
 
   .container {
     display: flex;
     margin: 0 auto;
     align-items: center;
-    width: 860px;
+    width: 1280px;
     max-width: 100%;
   }
 

@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const StyledFilterPanel = styled.aside`
-  flex: 1;
+  width: 310px;
   padding: 20px;
 `;
 

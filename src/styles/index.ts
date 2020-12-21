@@ -29,6 +29,15 @@ body {
 }
 a {
    text-decoration: none;
+   color: #0f8fee;
+
+    &:hover {
+      color: #be1010;
+    }
+
+    &:visited {
+      color: #be1010;
+    }
 }
 
 p {
@@ -37,8 +46,14 @@ p {
 }
 
 .mainContainer {
-  width: 860px;
-  margin: 0 auto;
+    width: 1320px;
+    max-width: 100%;
+    margin: 0 auto;
+
+}
+
+.mainWrapper {
+margin: 0 40px 0 20px;
 }
 `;
 

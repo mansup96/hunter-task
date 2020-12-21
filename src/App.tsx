@@ -8,8 +8,7 @@ import {
 import Header from './components/Header/Header';
 import Search from './components/routes/Search/Search';
 import Auth from './components/routes/Auth/Auth';
-import Home from './components/routes/Home/Home';
-import {debuglog} from "util";
+import Vacancy from './components/routes/Vacancy/Vacancy';
 
 const App = () => {
   return (
@@ -17,14 +16,17 @@ const App = () => {
       <Router>
         <Header />
         <main className="mainContainer">
-          <Switch>
-            <Route path={['/login', '/sign_up']} render={() => <Auth />} />
-            <Route path="/search/:searchFor" render={() => <Search />} />
-            <Route
-              path="/"
-              render={() => <Redirect to={'/search/vacancies'} />}
-            />
-          </Switch>
+          <div className="mainWrapper">
+            <Switch>
+              <Route path={['/login', '/sign_up']} render={() => <Auth />} />
+              <Route path="/search/:searchFor" render={() => <Search />} />
+              <Route path={'/vacancy/:id'} render={() => <Vacancy />} />
+              <Route
+                path="/"
+                render={() => <Redirect to={'/search/vacancies'} />}
+              />
+            </Switch>
+          </div>
         </main>
       </Router>
     </div>

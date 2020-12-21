@@ -22,6 +22,10 @@ const StyledFilterItem = styled.li<{ active: boolean }>`
 
   &:hover {
     background-color: ${({ theme }) => theme.gray};
+
+    img {
+      display: block;
+    }
   }
 
   .itemName {
@@ -33,8 +37,9 @@ const StyledFilterItem = styled.li<{ active: boolean }>`
   }
 
   img {
+    display: none;
     margin-left: auto;
-    width: 10px;
+    width: 8px;
   }
 `;
 

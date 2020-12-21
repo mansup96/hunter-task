@@ -12,6 +12,14 @@ const headHunterApi = {
       console.log(err);
     }
   },
+
+  getVacancy: async (id: string) => {
+    try {
+      return (await hhAxios.get(`vacancies/${id}`)).data;
+    } catch (err) {
+      console.log(err);
+    }
+  },
 };
 
 export default headHunterApi;

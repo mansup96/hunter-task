@@ -21,7 +21,6 @@ const Search = () => {
   const history = useHistory();
   const { searchFor } = useParams<TRouteParams>();
   const { query } = useMemo(() => queryString.parseUrl(search), [search]);
-  console.log('render')
   useEffect(() => {
     searchStore.fetch(query, searchFor);
   }, [searchStore, query, searchFor]);
@@ -48,18 +47,18 @@ const Search = () => {
       {!!searchStore.pagination.found && (
         <Info amount={searchStore.pagination.found} type={searchFor} />
       )}
-      {!searchStore.isFetching && (
-        <>
-          <div className="contentWrapper">
-            <FilterPanel
-              clusters={searchStore.clusters}
-              onFilterChanged={queryParamsHandler}
-            />
+      <>
+        <div className="contentWrapper">
+          <FilterPanel
+            clusters={searchStore.clusters}
+            onFilterChanged={queryParamsHandler}
+          />
+          {!searchStore.isFetching && (
             <List items={searchStore.items} itemType={searchFor} />
-          </div>
-          <Pagination {...searchStore.pagination} onPageChange={handlePage} />
-        </>
-      )}
+          )}
+        </div>
+        <Pagination {...searchStore.pagination} onPageChange={handlePage} />
+      </>
     </StyledSearch>
   );
 };

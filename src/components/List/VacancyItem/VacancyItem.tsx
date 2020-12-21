@@ -1,8 +1,8 @@
 import React from 'react';
-import { TVacancy } from '../../../store/searchStore';
 import StyledVacancyItem from './StyledVacancyItem';
 import Salary from '../../common/Salary/Salary';
 import { Link } from 'react-router-dom';
+import { TVacancy } from '../../../store/vacancyStore';
 
 const VacancyItem = ({ item }: { item: TVacancy }) => {
   return (
@@ -11,7 +11,7 @@ const VacancyItem = ({ item }: { item: TVacancy }) => {
         <Link className="title" to={`/vacancy/${item.id}`}>
           {item.name}
         </Link>
-        {item.salary && <Salary salary={item.salary} className="salary" />}
+        <Salary salary={item.salary} className="salary" />
       </div>
       {item.employer && (
         <a
