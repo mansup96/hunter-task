@@ -2,7 +2,10 @@ import axios from 'axios';
 import Mocker from 'axios-mock-adapter';
 import { v4 as uuidv4 } from 'uuid';
 
-const mock = new Mocker(axios, { onNoMatch: 'passthrough' });
+const mock = new Mocker(axios, {
+  onNoMatch: 'passthrough',
+  delayResponse: 1000,
+});
 
 type TUser = {
   id: string;
@@ -91,7 +94,7 @@ mock.onPost('/sign_up').reply(req => {
 });
 
 mock.onPost('/me').reply(req => {
-  const refuse = () => [FORBIDDEN, { common: 'Cессия не существует' }];
+  const refuse = () => [FORBIDDEN, 'Cессия не существует'];
   const token = req.data;
 
   if (!token) return refuse();
@@ -109,6 +112,12 @@ mock.onPost('/me').reply(req => {
 
   const { password, ...me } = user;
   return [200, { ...me }];
+});
+
+mock.onPost('/logout').reply(req => {
+  localStorage.setItem('hunterSessions', '');
+
+  return [200];
 });
 
 export default axios;

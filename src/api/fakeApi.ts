@@ -1,11 +1,11 @@
 import mockedAxios, { FORBIDDEN } from './fakeServer';
 import { TLoginFormData, TSignUpFormData } from '../store/authStore';
-
+import { log } from 'util';
 
 export class ValidationError extends Error {
   data: { [key: string]: string };
   constructor(data: { [key: string]: string }) {
-    super('Ошибка валидации формы');
+    super('Ошибка валидации');
     this.data = data;
   }
 }
@@ -39,7 +39,15 @@ export const fakeApi = {
     try {
       return await mockedAxios.post('/me', token);
     } catch (error) {
-      console.log(error);
+      if (error.response.status === FORBIDDEN) {
+        throw new ValidationError(error.response.data);
+      } else {
+        console.log(error);
+      }
     }
+  },
+
+  logout: () => {
+    mockedAxios.post('/logout').catch(err => console.log(err));
   },
 };

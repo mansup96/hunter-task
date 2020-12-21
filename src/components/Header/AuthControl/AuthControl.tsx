@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { observer } from 'mobx-react-lite';
 import { Link } from 'react-router-dom';
 import { useStores } from '../../../hooks';
+import preloader from '../../../static/icons/preloader.svg';
 
 const StyledAuthControl = styled.div`
   .name {
@@ -21,14 +22,19 @@ const StyledAuthControl = styled.div`
     background-color: transparent;
     border: none;
   }
+
+  img {
+    width: 28px;
+    margin-right: 30px;
+  }
 `;
 
 const AuthControl = () => {
   const { authStore } = useStores();
 
-  return (
+  return authStore.isMeChecked ? (
     <StyledAuthControl>
-      {authStore.isAuth ? (
+      {authStore.isAuth && authStore.isMeChecked ? (
         <>
           <span className="name">{authStore.name}</span>
           <button className="logout" onClick={authStore.logout}>
@@ -45,6 +51,10 @@ const AuthControl = () => {
           </Link>
         </>
       )}
+    </StyledAuthControl>
+  ) : (
+    <StyledAuthControl>
+      <img src={preloader} alt="preloader" />
     </StyledAuthControl>
   );
 };

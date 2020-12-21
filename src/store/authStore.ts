@@ -18,8 +18,6 @@ type TMe = {
 };
 
 export class AuthStore {
-  me: TMe | null = null;
-
   constructor() {
     makeObservable(this, {
       me: observable,
@@ -29,20 +27,28 @@ export class AuthStore {
       checkMe: action,
       setMe: action,
       logout: action,
+      isMeChecked: observable,
     });
     this.checkMe();
   }
 
-  async checkMe() {
-    try {
-      const accessToken = localStorage.getItem('accessToken');
-      if (!accessToken) return;
-      const response = await fakeApi.me(accessToken);
-      if (!response?.data) throw new Error('Ошибка сервера');
-      this.setMe(response.data);
-    } catch (error) {
-      console.log(error);
+  me: TMe | null = null;
+  isMeChecked: boolean = false;
+
+  checkMe() {
+    const accessToken = localStorage.getItem('accessToken');
+    if (!accessToken) {
+      this.isMeChecked = true;
+      return;
     }
+    fakeApi
+      .me(accessToken)
+      .then(resp => {
+        if (!resp?.data) throw new Error('Ошибка сервера');
+        this.setMe(resp.data);
+        this.isMeChecked = true;
+      })
+      .catch(error => console.log(error.data || error));
   }
 
   setMe(me: TMe | null) {
@@ -88,6 +94,7 @@ export class AuthStore {
 
   logout = () => {
     this.setMe(null);
-    localStorage.setItem('accessToken', 'null');
+    localStorage.setItem('accessToken', '');
+    fakeApi.logout();
   };
 }
