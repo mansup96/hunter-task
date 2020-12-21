@@ -79,14 +79,19 @@ export class VacancyStore {
     makeObservable(this, {
       vacancy: observable,
       getVacancy: action,
+      setVacancy: action,
     });
   }
 
   vacancy: TVacancy | null = null;
 
+  setVacancy(vacancy: TVacancy | null) {
+    this.vacancy = vacancy;
+  }
+
   async getVacancy(id: string) {
     try {
-      this.vacancy = await headHunterApi.getVacancy(id);
+      this.setVacancy(await headHunterApi.getVacancy(id));
     } catch (err) {
       console.log(err);
     }
